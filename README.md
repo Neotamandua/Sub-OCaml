@@ -1,5 +1,10 @@
 # Sub-OCaml
 
+[![made-with-rust](https://img.shields.io/badge/Made%20with-Rust-1f425f.svg?style=flat-square)](https://www.rust-lang.org/)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg?style=flat-square)](https://github.com/Neotamandua/Sub-OCaml/blob/master/LICENSE)
+![License: MPL 2.0](https://img.shields.io/github/languages/code-size/Neotamandua/Sub-OCaml?style=flat-square)
+![Github CI](https://img.shields.io/github/workflow/status/Neotamandua/Sub-Ocaml/CI%20Test%20Project?style=flat-square)
+
 > Interpreter for a subset of the OCaml language.
 
 ## Usage
