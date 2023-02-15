@@ -11,7 +11,7 @@ where
 {
     let mut s: Vec<T> = Vec::new();
 
-    for i in 0..n {
+    for _ in 0..n {
         s.push(if let Some(n) = iterator.next() {
             n
         } else {
