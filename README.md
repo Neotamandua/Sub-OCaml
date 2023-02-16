@@ -13,7 +13,7 @@
 
 ```toml
 [dependencies]
-anyhow = "1.0.57"
+thiserror = "1.0.38"
 ```
 
 ### Features:

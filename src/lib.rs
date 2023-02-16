@@ -1,10 +1,12 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 mod lex;
 mod parse;
 //mod typechecker;
 //mod eval;
+mod error;
 mod utils;
 
 pub use lex::lexer;
@@ -14,7 +16,7 @@ pub use parse::parse;
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test() {
+    fn test_all() {
         use crate::lex::Token;
         //use crate::parse::ty;
         //use std::collections::HashMap;

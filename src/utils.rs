@@ -2,10 +2,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-use anyhow::bail;
+use crate::error::{Result, UtilsError};
 use std::iter::{Iterator, Peekable};
 
-fn getsubchar_generic<I, T>(iterator: &mut I, n: usize) -> anyhow::Result<Vec<T>>
+fn _getsubchar_generic<I, T>(iterator: &mut I, n: usize) -> Result<Vec<T>>
 where
     I: Iterator<Item = T>,
 {
@@ -15,13 +15,13 @@ where
         s.push(if let Some(n) = iterator.next() {
             n
         } else {
-            bail!("EOF, out of bounds");
+            Err(UtilsError::OutOfBounds)?
         });
     }
     return Ok(s);
 }
 
-pub fn getsubchar<I>(iterator: &mut Peekable<I>, n: usize) -> anyhow::Result<String>
+pub fn getsubchar<I>(iterator: &mut Peekable<I>, n: usize) -> Result<String>
 where
     I: Iterator<Item = char> + Clone,
 {
@@ -32,7 +32,7 @@ where
         s.push(if let Some(n) = citerator.next() {
             n.clone()
         } else {
-            bail!("EOF, out of bounds");
+            Err(UtilsError::OutOfBounds)?
         });
     }
     return Ok(s);

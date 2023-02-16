@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+use crate::error::{LexerError, Result};
 use crate::utils::getsubchar;
-use anyhow::bail;
 use std::fmt::Debug;
 use std::iter::{Iterator, Peekable};
 use std::str;
@@ -35,7 +35,7 @@ pub enum Token {
     VAR(String),
 }
 
-pub fn lexer(code: &str) -> anyhow::Result<Vec<Token>> {
+pub fn lexer(code: &str) -> Result<Vec<Token>> {
     let mut tokenlist: Vec<Token> = Vec::new();
     let mut iterator = code.chars().peekable();
 
@@ -51,7 +51,7 @@ pub fn lexer(code: &str) -> anyhow::Result<Vec<Token>> {
     Ok(tokenlist)
 }
 
-fn lexer2<I>(tokenlist: &mut Vec<Token>, iterator: &mut Peekable<I>) -> anyhow::Result<()>
+fn lexer2<I>(tokenlist: &mut Vec<Token>, iterator: &mut Peekable<I>) -> Result<()>
 where
     I: Iterator<Item = char> + Debug + Clone,
 {
@@ -65,7 +65,7 @@ where
                 drop(iterator.nth(2));
 
                 while getsubchar(iterator, 2)
-                    .map_err(|_| anyhow::anyhow!("lex fail: Comment started but does not end"))?
+                    .map_err(|_| LexerError::CommentError)?
                     .as_str()
                     != "*)"
                 {
@@ -106,10 +106,7 @@ where
                 iterator.next();
                 Token::LEQ
             } else {
-                panic!(
-                    "'<' is forbidden in Identifiers, Keywords and Variables (Syntax Error). \n 
-                Additional information: No LT (<=) supported yet"
-                );
+                return Err(LexerError::ForbiddenCharLEQ)?;
             }
         }
         '-' => {
@@ -127,22 +124,23 @@ where
         }
         '0'..='9' => tokenize_number(iterator)?,
         c if c.is_lowercase() => tokenize_identifiers(iterator)?,
-        _ => panic!("Lex Error no valid Character found"),
+        _ => Err(LexerError::ForbiddenChar)?,
     };
 
     tokenlist.push(token);
     Ok(())
 }
 
-fn tokenize_number<I>(iterator: &mut Peekable<I>) -> anyhow::Result<Token>
+fn tokenize_number<I>(iterator: &mut Peekable<I>) -> Result<Token>
 where
     I: Iterator<Item = char> + Debug,
 {
+    /* this should never happen
     if let Some(n) = iterator.peek() {
         if !n.is_numeric() {
-            panic!("tokenize_number: Iterator does not begin with a Number");
+            unreachable!("tokenize_number: Iterator does not begin with a Number");
         }
-    }
+    }*/
 
     let mut integer: isize = 0;
 
@@ -156,13 +154,13 @@ where
     Ok(Token::CON(Constant::ICON(integer)))
 }
 
-fn tokenize_identifiers<I>(iterator: &mut Peekable<I>) -> anyhow::Result<Token>
+fn tokenize_identifiers<I>(iterator: &mut Peekable<I>) -> Result<Token>
 where
     I: Iterator<Item = char> + Debug + Clone,
 {
     match iterator.peek() {
-        Some(ch) if ch.is_digit(10) => panic!("Identifiers are not allowed to start with a number"),
-        None => panic!("EOF"),
+        Some(ch) if ch.is_digit(10) => Err(LexerError::IdentifierError)?,
+        None => Err(LexerError::EOFError)?,
         _ => {}
     }
 
@@ -188,7 +186,7 @@ where
     Ok(token)
 }
 
-fn take_while<F>(data: &str, mut pred: F) -> anyhow::Result<(&str, usize)>
+fn take_while<F>(data: &str, mut pred: F) -> Result<(&str, usize)>
 where
     F: FnMut(char) -> bool,
 {
@@ -205,7 +203,7 @@ where
     }
 
     if current_index == 0 {
-        panic!("No Matches")
+        Err(LexerError::NoMatches)?
     } else {
         Ok((&data[..current_index], current_index))
     }
