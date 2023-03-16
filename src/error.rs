@@ -53,7 +53,28 @@ pub enum ParserError {
 }
 
 #[derive(Debug, Error)]
-pub enum TypeCheckError {}
+pub enum TypeCheckError {
+    #[error("Typecheck Error: operator application failed because of ill-typed arguments")]
+    ArgumentError,
+    #[error("Typecheck Error: function application failed because of wrong argument type")]
+    WrongArgument,
+    #[error(
+        "Typecheck Error: function application failed because function was expected but none given"
+    )]
+    MissingFunction,
+    #[error("Typecheck Error: variable {0} is unbound")]
+    UnboundVariable(String),
+    #[error("Typecheck Error: types for branch cases (if-case, else-case) are not equal")]
+    UnequalIfTypes,
+    #[error("Typecheck Error: bool expected for if but got {0}")]
+    WrongIfType(String),
+    #[error("Typecheck Error: fun has missing type")]
+    MissingFunctionType,
+    #[error("Typecheck Error: missing types for let rec")]
+    MissingType,
+    #[error("Typecheck Error: declared type of let rec not matched")]
+    NoTypeMatch,
+}
 
 #[derive(Debug, Error)]
 pub enum EvaluatorError {}

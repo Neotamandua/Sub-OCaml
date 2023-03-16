@@ -28,7 +28,7 @@ mod tests {
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
         let mut map: HashMap<String, ty> = HashMap::new();
-        let typed = super::type_check(&mut map, ast);
+        let typed = super::type_check(&mut map, ast).unwrap();
         println!("After Typecheck: {:?}", typed);
 
         assert_eq!(typed, ty::Int);
@@ -43,7 +43,7 @@ mod tests {
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
         let mut map: HashMap<String, ty> = HashMap::new();
-        let typed = super::type_check(&mut map, ast);
+        let typed = super::type_check(&mut map, ast).unwrap();
         println!("After Typecheck: {:?}", typed);
 
         assert_eq!(typed, ty::Int);
@@ -58,7 +58,7 @@ mod tests {
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
         let mut map: HashMap<String, ty> = HashMap::new();
-        let typed = super::type_check(&mut map, ast);
+        let typed = super::type_check(&mut map, ast).unwrap();
         println!("After Typecheck: {:?}", typed);
 
         assert_eq!(typed, ty::Bool);
