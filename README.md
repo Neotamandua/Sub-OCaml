@@ -21,7 +21,7 @@ thiserror = "1.0.38"
 | -------- | --------------- |
 | Lexer  | ✅|
 | Parser    | ✅ |
-| Typechecker   | not yet published            |
+| Typechecker   | ✅            |
 | Evaluator   | not yet published            |
 
 
@@ -36,6 +36,8 @@ Lex result:
 Parse result:
 > Let("x", Con(Icon(5)), Var("x"))
 
+Typechecker result:
+> Int
 ___
 
 **2**
@@ -48,15 +50,22 @@ Lex result:
 Parse result:
 > Letrecty("fib", "a", Int, Arrow(Int, Arrow(Int, Int)), Lamty("b", Int, Lamty("n", Int, If(Oapp(Leq, Var("n"), Con(Icon(0))), Var("a"), Fapp(Fapp(Fapp(Var("fib"), Var("b")), Oapp(Add, Var("a"), Var("b"))), Oapp(Sub, Var("n"), Con(Icon(1))))))), Fapp(Fapp(Fapp(Var("fib"), Con(Icon(0))), Con(Icon(1))), Con(Icon(8))))
 
+Typechecker result:
+> Int
+
 Example usage code:
 ```rust
-use Sub_OCaml::{lexer, parse};
+use Sub_OCaml::{lexer, parse, ty, type_check};
 
 fn main() {
     let src = "let x = 5 in x";
-    let tokenlist = lexer(&src).unwrap();
-    println!("After Lex: {:?}", tokenlist);
-    let ast = parse(tokenlist).0;
-    println!("After Parse: {:?}", ast);
+    println!("Code: {} \n", src);
+    let tokenlist: Vec<Token> = lexer(&src).unwrap();
+    println!("After Lex: {:?} \n", tokenlist);
+    let ast = parse(tokenlist).unwrap().0;
+    println!("After Parse: {:?} \n", ast);
+    let mut map: HashMap<String, ty> = HashMap::new();
+    let typed = type_check(&mut map, ast);
+    println!("After Typecheck: {:?}", typed);
 }
 ```
