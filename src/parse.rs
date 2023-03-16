@@ -144,8 +144,8 @@ fn exp(l: Vec<Token>) -> Result<(exp, Vec<Token>)> {
 
             return Ok((
                 exp::Letrecty(
-                    x.to_string(),
                     f.to_string(),
+                    x.to_string(),
                     t1,
                     t2,
                     Box::new(e1),

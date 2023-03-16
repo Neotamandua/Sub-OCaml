@@ -46,7 +46,7 @@ Lex result:
 > [LET, REC, VAR("fib"), LP, VAR("a"), COL, VAR("int"), RP, COL, VAR("int"), ARR, VAR("int"), ARR, VAR("int"), EQ, LAM, LP, VAR("b"), COL, VAR("int"), RP, ARR, LAM, LP, VAR("n"), COL, VAR("int"), RP, ARR, IF, VAR("n"), LEQ, CON(ICON(0)), THEN, VAR("a"), ELSE, VAR("fib"), LP, VAR("b"), RP, LP, VAR("a"), ADD, VAR("b"), RP, LP, VAR("n"), SUB, CON(ICON(1)), RP, IN, VAR("fib"), CON(ICON(0)), CON(ICON(1)), CON(ICON(8))]
 
 Parse result:
-> Letrecty("a", "fib", Int, Arrow(Int, Arrow(Int, Int)), Lamty("b", Int, Lamty("n", Int, If(Oapp(Leq, Var("n"), Con(Icon(0))), Var("a"), Fapp(Fapp(Fapp(Var("fib"), Var("b")), Oapp(Add, Var("a"), Var("b"))), Oapp(Sub, Var("n"), Con(Icon(1))))))), Fapp(Fapp(Fapp(Var("fib"), Con(Icon(0))), Con(Icon(1))), Con(Icon(8))))
+> Letrecty("fib", "a", Int, Arrow(Int, Arrow(Int, Int)), Lamty("b", Int, Lamty("n", Int, If(Oapp(Leq, Var("n"), Con(Icon(0))), Var("a"), Fapp(Fapp(Fapp(Var("fib"), Var("b")), Oapp(Add, Var("a"), Var("b"))), Oapp(Sub, Var("n"), Con(Icon(1))))))), Fapp(Fapp(Fapp(Var("fib"), Con(Icon(0))), Con(Icon(1))), Con(Icon(8))))
 
 Example usage code:
 ```rust
