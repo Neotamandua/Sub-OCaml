@@ -4,7 +4,7 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg?style=flat-square)](https://github.com/Neotamandua/Sub-OCaml/blob/master/LICENSE)
 ![License: MPL 2.0](https://img.shields.io/github/languages/code-size/Neotamandua/Sub-OCaml?style=flat-square)
 ![Github CI](https://img.shields.io/github/actions/workflow/status/Neotamandua/Sub-Ocaml/build.yml?style=flat-square)
-> Interpreter for a subset of the OCaml language.
+> Interpreter for a subset of the OCaml language. \
 
 ## Usage
 
@@ -22,7 +22,7 @@ thiserror = "1.0.38"
 | Lexer  | ✅|
 | Parser    | ✅ |
 | Typechecker   | ✅            |
-| Evaluator   | not yet published            |
+| Evaluator   | ✅         |
 
 
 ### Examples:
@@ -38,6 +38,9 @@ Parse result:
 
 Typechecker result:
 > Int
+
+Evaluator result:
+> IntValue(5)
 ___
 
 **2**
@@ -52,6 +55,9 @@ Parse result:
 
 Typechecker result:
 > Int
+
+Evaluator result:
+> IntValue(21)
 
 Example usage code:
 ```rust

@@ -18,12 +18,12 @@ pub enum ty {
     Arrow(Box<ty>, Box<ty>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum con {
     Bcon(bool),
     Icon(isize),
 }
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum operator {
     Add,
     Sub,
@@ -35,9 +35,9 @@ pub enum operator {
     Gt,
 }
 
-type var = String;
+pub type var = String;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum exp {
     Var(var),
     Con(con),

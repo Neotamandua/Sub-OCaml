@@ -1,6 +1,7 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
 use crate::error::{Result, TypeCheckError};
 use crate::parse::{con, exp, operator, ty};
 use std::collections::HashMap;
@@ -34,8 +35,8 @@ pub fn type_check(env: &mut HashMap<String, ty>, e: exp) -> Result<ty> {
             Some(t) => Ok(t.clone()),
             None => Err(TypeCheckError::UnboundVariable(x))?,
         },
-        exp::Con(con::Bcon(b)) => Ok(ty::Bool),
-        exp::Con(con::Icon(n)) => Ok(ty::Int),
+        exp::Con(con::Bcon(_b)) => Ok(ty::Bool),
+        exp::Con(con::Icon(_n)) => Ok(ty::Int),
         exp::Oapp(o, e1, e2) => Ok(check_operator(
             o,
             type_check(env, *e1)?,
@@ -69,7 +70,7 @@ pub fn type_check(env: &mut HashMap<String, ty>, e: exp) -> Result<ty> {
             env.insert(x, t);
             type_check(env, *e2)
         }
-        exp::Letrec(f, x, e1, e2) => Err(TypeCheckError::MissingType)?,
+        exp::Letrec(_f, _x, _e1, _e2) => Err(TypeCheckError::MissingType)?,
         exp::Letrecty(f, x, t1, t2, e1, e2) => {
             env.insert(f, ty::Arrow(Box::new(t1.clone()), Box::new(t2.clone())));
             let mut new_env = env.clone();

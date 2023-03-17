@@ -2,19 +2,51 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+pub mod error;
+mod evaluator;
 mod lex;
 mod parse;
 mod typechecker;
-//mod eval;
-mod error;
 mod utils;
-
-pub use lex::lexer;
-pub use parse::parse;
+pub use error::Result;
+pub use evaluator::{evaluate, value};
+pub use lex::{lexer, Token};
+pub use parse::{parse, ty};
+use std::collections::HashMap;
 pub use typechecker::type_check;
+
+pub fn run_code(
+    code: &str,
+) -> Result<(HashMap<String, ty>, HashMap<String, Box<value>>, ty, value)> {
+    let tokenlist: Vec<Token> = lexer(&code)?;
+    let ast = parse(tokenlist)?.0;
+    let mut type_env: HashMap<String, ty> = HashMap::new();
+    let typed = type_check(&mut type_env, ast.clone())?;
+    let mut value_env: HashMap<String, Box<value>> = HashMap::new();
+    let evaluated = evaluate(&mut value_env, ast)?;
+    Ok((type_env, value_env, typed, evaluated))
+}
+
+pub fn run_code_with_persistent_environment<'a>(
+    type_env: &'a mut HashMap<String, ty>,
+    value_env: &'a mut HashMap<String, Box<value>>,
+    code: &'a str,
+) -> Result<(
+    &'a mut HashMap<String, ty>,
+    &'a mut HashMap<String, Box<value>>,
+    ty,
+    value,
+)> {
+    let tokenlist: Vec<Token> = lexer(&code)?;
+    let ast = parse(tokenlist)?.0;
+    let typed = type_check(type_env, ast.clone())?;
+    let evaluated = evaluate(value_env, ast)?;
+    Ok((type_env, value_env, typed, evaluated))
+}
 
 #[cfg(test)]
 mod tests {
+    use crate::evaluator::value;
     use crate::lex::Token;
     use crate::parse::ty;
     use std::collections::HashMap;
@@ -28,9 +60,11 @@ mod tests {
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
         let mut map: HashMap<String, ty> = HashMap::new();
-        let typed = super::type_check(&mut map, ast).unwrap();
+        let typed = super::type_check(&mut map, ast.clone()).unwrap();
         println!("After Typecheck: {:?}", typed);
-
+        let mut map: HashMap<String, Box<value>> = HashMap::new();
+        let evaluated = super::evaluate(&mut map, ast);
+        println!("After Evaluation: {:?}", evaluated);
         assert_eq!(typed, ty::Int);
     }
 
@@ -43,8 +77,11 @@ mod tests {
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
         let mut map: HashMap<String, ty> = HashMap::new();
-        let typed = super::type_check(&mut map, ast).unwrap();
+        let typed = super::type_check(&mut map, ast.clone()).unwrap();
         println!("After Typecheck: {:?}", typed);
+        let mut map: HashMap<String, Box<value>> = HashMap::new();
+        let evaluated = super::evaluate(&mut map, ast);
+        println!("After Evaluation: {:?}", evaluated);
 
         assert_eq!(typed, ty::Int);
     }
@@ -58,8 +95,11 @@ mod tests {
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
         let mut map: HashMap<String, ty> = HashMap::new();
-        let typed = super::type_check(&mut map, ast).unwrap();
+        let typed = super::type_check(&mut map, ast.clone()).unwrap();
         println!("After Typecheck: {:?}", typed);
+        let mut map: HashMap<String, Box<value>> = HashMap::new();
+        let evaluated = super::evaluate(&mut map, ast);
+        println!("After Evaluation: {:?}", evaluated);
 
         assert_eq!(typed, ty::Bool);
     }

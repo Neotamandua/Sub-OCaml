@@ -77,7 +77,16 @@ pub enum TypeCheckError {
 }
 
 #[derive(Debug, Error)]
-pub enum EvaluatorError {}
+pub enum EvaluatorError {
+    #[error("Evaluate Error: operator application failed because of ill-typed arguments")]
+    ArgumentError,
+    #[error(
+        "Evaluate Error: function application failed because function was expected but none given"
+    )]
+    MissingFunction,
+    #[error("Evaluate Error: bool expected for if but got {0}")]
+    WrongIfType(String),
+}
 
 #[derive(Debug, Error)]
 pub enum UtilsError {
