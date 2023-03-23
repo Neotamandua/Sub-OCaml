@@ -3,10 +3,12 @@
 [![made-with-rust](https://img.shields.io/badge/Made%20with-Rust-1f425f.svg?style=flat-square)](https://www.rust-lang.org/)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg?style=flat-square)](https://github.com/Neotamandua/Sub-OCaml/blob/master/LICENSE)
 ![License: MPL 2.0](https://img.shields.io/github/languages/code-size/Neotamandua/Sub-OCaml?style=flat-square)
-![Github CI](https://img.shields.io/github/actions/workflow/status/Neotamandua/Sub-Ocaml/build.yml?style=flat-square)
+![Github CI](https://img.shields.io/github/actions/workflow/status/Neotamandua/Sub-OCaml/build.yml?style=flat-square)
 > Interpreter for a subset of the OCaml language. \
+> This project did not intend to use idiomatic rust code. I mainly explored the syntactical possibilites of matches, recursion etc. for rust.
 
 ## Usage
+You can use the [REPL](https://github.com/Neotamandua/Sub-OCaml-REPL/) to directly execute code and try it out
 
 ### Dependencies:
 

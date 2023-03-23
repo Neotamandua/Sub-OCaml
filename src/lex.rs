@@ -35,13 +35,13 @@ pub enum Token {
     VAR(String),
 }
 
-pub fn lexer(code: &str) -> Result<Vec<Token>> {
+pub fn lex(code: &str) -> Result<Vec<Token>> {
     let mut tokenlist: Vec<Token> = Vec::new();
     let mut iterator = code.chars().peekable();
 
     loop {
         if let Some(_) = iterator.peek() {
-            lexer2(&mut tokenlist, &mut iterator)?;
+            lexer(&mut tokenlist, &mut iterator)?;
             continue;
         } else {
             break;
@@ -51,7 +51,7 @@ pub fn lexer(code: &str) -> Result<Vec<Token>> {
     Ok(tokenlist)
 }
 
-fn lexer2<I>(tokenlist: &mut Vec<Token>, iterator: &mut Peekable<I>) -> Result<()>
+fn lexer<I>(tokenlist: &mut Vec<Token>, iterator: &mut Peekable<I>) -> Result<()>
 where
     I: Iterator<Item = char> + Debug + Clone,
 {
@@ -221,7 +221,7 @@ mod tests {
     where
         S: AsRef<str> + Display,
     {
-        let r = if let Ok(e) = lexer(&code) {
+        let r = if let Ok(e) = lex(&code) {
             e
         } else {
             panic!("{}", panicmsg)
