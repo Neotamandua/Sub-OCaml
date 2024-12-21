@@ -72,7 +72,7 @@ fn main() {
     println!("After Lex: {:?} \n", tokenlist);
     let ast = parse(tokenlist).unwrap().0;
     println!("After Parse: {:?} \n", ast);
-    let mut map: HashMap<String, ty> = HashMap::new();
+    let mut map: BTreeMap<String, ty> = BTreeMap::new();
     let typed = super::type_check(&mut map, ast).unwrap();
     println!("After Typecheck: {:?}", typed);
 }

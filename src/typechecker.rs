@@ -4,7 +4,7 @@
 
 use crate::error::{Result, TypeCheckError};
 use crate::parse::{con, exp, operator, ty};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 fn check_operator(o: operator, t1: ty, t2: ty) -> Result<ty> {
     match (o, t1, t2) {
@@ -29,7 +29,7 @@ fn check_fun(t1: ty, t2: ty) -> Result<ty> {
     }
 }
 
-pub fn type_check(env: &mut HashMap<String, ty>, e: exp) -> Result<ty> {
+pub fn type_check(env: &mut BTreeMap<String, ty>, e: exp) -> Result<ty> {
     match e {
         exp::Var(x) => match env.get(&x) {
             Some(t) => Ok(t.clone()),

@@ -13,27 +13,29 @@ pub use evaluator::{evaluate, value};
 pub use lex::{lex, Token};
 pub use parse::{parse, ty};
 pub use typechecker::type_check;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
+
+#[allow(non_snake_case)]
 
 pub fn run_code(
     code: &str,
-) -> Result<(HashMap<String, ty>, HashMap<String, Box<value>>, ty, value)> {
+) -> Result<(BTreeMap<String, ty>, BTreeMap<String, Box<value>>, ty, value)> {
     let tokenlist: Vec<Token> = lex(&code)?;
     let ast = parse(tokenlist)?.0;
-    let mut type_env: HashMap<String, ty> = HashMap::new();
+    let mut type_env: BTreeMap<String, ty> = BTreeMap::new();
     let typed = type_check(&mut type_env, ast.clone())?;
-    let mut value_env: HashMap<String, Box<value>> = HashMap::new();
+    let mut value_env: BTreeMap<String, Box<value>> = BTreeMap::new();
     let evaluated = evaluate(&mut value_env, ast)?;
     Ok((type_env, value_env, typed, evaluated))
 }
 
 pub fn run_code_with_persistent_environment<'a>(
-    type_env: &'a mut HashMap<String, ty>,
-    value_env: &'a mut HashMap<String, Box<value>>,
+    type_env: &'a mut BTreeMap<String, ty>,
+    value_env: &'a mut BTreeMap<String, Box<value>>,
     code: &'a str,
 ) -> Result<(
-    &'a mut HashMap<String, ty>,
-    &'a mut HashMap<String, Box<value>>,
+    &'a mut BTreeMap<String, ty>,
+    &'a mut BTreeMap<String, Box<value>>,
     ty,
     value,
 )> {
@@ -50,7 +52,7 @@ mod tests {
     use super::run_code;
     use crate::lex::Token;
     use crate::parse::ty;
-    use std::collections::HashMap;
+    use std::collections::BTreeMap;
 
     #[test]
     fn test_all_int_1() {
@@ -60,10 +62,10 @@ mod tests {
         println!("After Lex: {:?} \n", tokenlist);
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
-        let mut map: HashMap<String, ty> = HashMap::new();
+        let mut map: BTreeMap<String, ty> = BTreeMap::new();
         let typed = super::type_check(&mut map, ast.clone()).unwrap();
         println!("After Typecheck: {:?}", typed);
-        let mut map: HashMap<String, Box<value>> = HashMap::new();
+        let mut map: BTreeMap<String, Box<value>> = BTreeMap::new();
         let evaluated = super::evaluate(&mut map, ast);
         println!("After Evaluation: {:?}", evaluated);
         assert_eq!(typed, ty::Int);
@@ -77,10 +79,10 @@ mod tests {
         println!("After Lex: {:?} \n", tokenlist);
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
-        let mut map: HashMap<String, ty> = HashMap::new();
+        let mut map: BTreeMap<String, ty> = BTreeMap::new();
         let typed = super::type_check(&mut map, ast.clone()).unwrap();
         println!("After Typecheck: {:?}", typed);
-        let mut map: HashMap<String, Box<value>> = HashMap::new();
+        let mut map: BTreeMap<String, Box<value>> = BTreeMap::new();
         let evaluated = super::evaluate(&mut map, ast);
         println!("After Evaluation: {:?}", evaluated);
 
@@ -95,10 +97,10 @@ mod tests {
         println!("After Lex: {:?} \n", tokenlist);
         let ast = super::parse(tokenlist).unwrap().0;
         println!("After Parse: {:?} \n", ast);
-        let mut map: HashMap<String, ty> = HashMap::new();
+        let mut map: BTreeMap<String, ty> = BTreeMap::new();
         let typed = super::type_check(&mut map, ast.clone()).unwrap();
         println!("After Typecheck: {:?}", typed);
-        let mut map: HashMap<String, Box<value>> = HashMap::new();
+        let mut map: BTreeMap<String, Box<value>> = BTreeMap::new();
         let evaluated = super::evaluate(&mut map, ast);
         println!("After Evaluation: {:?}", evaluated);
 

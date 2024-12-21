@@ -6,14 +6,14 @@
 
 use crate::error::{EvaluatorError, Result, TypeCheckError};
 use crate::parse::{con, exp, operator, var};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Debug, Clone)]
 pub enum value {
     BoolValue(bool),
     IntValue(isize),
-    Closure(var, exp, HashMap<var, Box<value>>),
-    Rclosure(var, var, exp, HashMap<var, Box<value>>),
+    Closure(var, exp, BTreeMap<var, Box<value>>),
+    Rclosure(var, var, exp, BTreeMap<var, Box<value>>),
 }
 
 fn eval_operator(o: operator, v1: value, v2: value) -> Result<value> {
@@ -41,7 +41,7 @@ fn eval_fun(v1: value, v2: value) -> Result<value> {
     }
 }
 
-pub fn evaluate(env: &mut HashMap<String, Box<value>>, e: exp) -> Result<value> {
+pub fn evaluate(env: &mut BTreeMap<String, Box<value>>, e: exp) -> Result<value> {
     match e {
         exp::Var(x) => match env.get(&x) {
             Some(v) => Ok(*v.clone()),
