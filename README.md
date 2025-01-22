@@ -14,7 +14,7 @@ You can use the [REPL](https://github.com/Neotamandua/Sub-OCaml-REPL/) to direct
 
 ```toml
 [dependencies]
-thiserror = "1.0.38"
+thiserror = "2.0"
 ```
 
 ### Features:
